@@ -1,6 +1,7 @@
 ﻿using OpenGLWrapper;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
@@ -60,6 +61,9 @@ namespace RotatinCubeScene
 
             GL.CompileShader(vertexShader);
             GL.CompileShader(fragmentShader);
+
+            PrintIVSuccess(vertexShader, ShaderParameter.CompileStatus);
+            PrintIVSuccess(fragmentShader, ShaderParameter.CompileStatus);
 
             Id = GL.CreateProgram();
             GL.AttachShader(Id, vertexShader);
@@ -151,20 +155,18 @@ namespace RotatinCubeScene
         }
         private void PrintIVSuccess(uint shader, ShaderParameter status)
         {
-            int shaderSuccess;
+            int shaderSuccess = -1;
             string infoLog = string.Empty;
             GL.GetShaderiv(shader, ShaderParameter.CompileStatus, &shaderSuccess);
-            if (shaderSuccess < 1)
+            if (shaderSuccess == -1)
             {
-                GL.GetShaderInfoLog(shader, 512, null, StringToBytePointer(infoLog));
+                fixed (char* infoLogPtr = infoLog)
+                {
+                    GL.GetShaderInfoLog(shader, 512, null, (byte*)infoLogPtr);
+                    Debug.Fail(infoLog);
+                }
                 Console.WriteLine($"Shader compilation error: {infoLog}.");
             }
-        }
-        private static byte* StringToBytePointer(string str)
-        {
-            IntPtr ptr = Marshal.StringToHGlobalAnsi(str);
-
-            return (byte*)ptr.ToPointer();
         }
         private static float[] ConvertToColumnMajor(Matrix4x4 matrix)
         {

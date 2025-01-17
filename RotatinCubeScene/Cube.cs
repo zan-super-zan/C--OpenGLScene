@@ -120,7 +120,7 @@ namespace RotatinCubeScene
             Matrix4x4 model = Matrix4x4.CreateRotationY((float)_rotationAngle * (float)(Math.PI / 180.0f)) * Matrix4x4.CreateTranslation(cubePosition);
 
             _cubeShader.Use();
-            _cubeShader.Use();
+
             _cubeShader.SetMat4("model", model);
             _cubeShader.SetMat4("view", camera.ViewMatrix);
             _cubeShader.SetMat4("projection", camera.ProjectionMatrix);

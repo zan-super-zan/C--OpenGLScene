@@ -15,7 +15,6 @@ namespace RotatinCubeScene
     {
         public const int ScreenWidth = 1080, ScreenHeight = 720;
 
-        private uint _VAO, _VBO;
         private Stopwatch _stopwatch = new Stopwatch();
         private float _lastFrameTime = 0.0f;
         private SkyBox _skyBox;
@@ -86,7 +85,6 @@ namespace RotatinCubeScene
             _cubeOne.Render();
             _cubeTwo.Render();
             _cubeThree.Render();
-
         }
         public void Open()
         {
